@@ -4,9 +4,14 @@ exports.deleteTask = exports.getTask = exports.editTask = exports.createTask = e
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const getAllTasks = async (req, res) => {
+    // const currentUser = req.user as User | undefined;
+    const currentUser = req.user;
+    if (!currentUser) {
+        return res.json({ tasks: [] });
+    }
     const user = await prisma.user.findFirstOrThrow({
         where: {
-            id: 1,
+            id: currentUser.id,
         },
     });
     const tasks = await prisma.task.findMany({

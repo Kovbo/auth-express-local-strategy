@@ -1,3 +1,5 @@
+import passport from "passport";
+
 const express = require("express");
 const authRouter = express.Router();
 
@@ -18,7 +20,17 @@ authRouter.get("/login", (req, res, next) => {
 
 // Since we are using the passport.authenticate() method, we should be redirected no matter what
 
-authRouter.post("/login", (req, res, next) => {});
+authRouter.post(
+  "/login",
+  passport.authenticate("local", {
+    successRedirect: "/login-success",
+    failureRedirect: "/login-failure",
+  })
+);
+
+authRouter.post("/currentUser", (req, res) => {
+  return res.json({ user: req.user });
+});
 
 // When you visit http://localhost:3000/register, you will see "Register Page"
 authRouter.get("/register", (req, res, next) => {

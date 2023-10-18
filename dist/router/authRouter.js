@@ -1,6 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authRouter = void 0;
+const passport_1 = __importDefault(require("passport"));
 const express = require("express");
 const authRouter = express.Router();
 exports.authRouter = authRouter;
@@ -16,7 +20,13 @@ authRouter.get("/login", (req, res, next) => {
     res.send(form);
 });
 // Since we are using the passport.authenticate() method, we should be redirected no matter what
-authRouter.post("/login", (req, res, next) => { });
+authRouter.post("/login", passport_1.default.authenticate("local", {
+    successRedirect: "/login-success",
+    failureRedirect: "/login-failure",
+}));
+authRouter.post("/currentUser", (req, res) => {
+    return res.json({ user: req.user });
+});
 // When you visit http://localhost:3000/register, you will see "Register Page"
 authRouter.get("/register", (req, res, next) => {
     const form = '<h1>Register Page</h1><form method="post" action="register">\

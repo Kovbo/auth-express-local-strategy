@@ -3,22 +3,22 @@ const prisma = new PrismaClient();
 async function main() {
   const bob = await prisma.user.create({
     data: {
-      name: "Bob",
-      email: "bob@example.com",
+      name: "Rob",
+      email: "rob@example.com",
       password: "pass",
     },
   });
 
   const project = await prisma.project.create({
     data: {
-      name: "First project",
+      name: "Rob project",
       userId: bob.id,
     },
   });
 
   const task = await prisma.task.create({
     data: {
-      name: "First task",
+      name: "Rob task",
       projectId: project.id,
     },
   });

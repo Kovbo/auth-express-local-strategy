@@ -1,12 +1,19 @@
 import { Request, Response } from "express";
-import { PrismaClient, Task } from "@prisma/client";
+import { PrismaClient, Task, User } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 const getAllTasks = async (req: Request, res: Response) => {
+  // const currentUser = req.user as User | undefined;
+  const currentUser = req.user as Partial<User> | undefined;
+
+  if (!currentUser) {
+    return res.json({ tasks: [] });
+  }
+
   const user = await prisma.user.findFirstOrThrow({
     where: {
-      id: 1,
+      id: currentUser.id,
     },
   });
 
